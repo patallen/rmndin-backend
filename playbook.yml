@@ -1,0 +1,60 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: true
+  tasks:
+    - name: Install System Packages
+      apt: pkg={{ item }} state=installed update-cache=yes
+      with_items:
+          - nginx
+          - rabbitmq-server
+          - python-pip
+          - python
+          - python-dev
+          - gcc
+          - libncurses5-dev
+          - libffi-dev
+          - build-essential
+          - postgresql
+          - libpq-dev
+          - htop
+          - vim
+          - redis-server
+          - python-psycopg2
+      notify: Start Everything
+
+    - name: Install Virtualenv
+      pip: name=virtualenv state=present
+
+    - name: Install Python Requirements
+      pip:
+        requirements: /var/rmndin/requirements.txt
+        virtualenv: /var/rmndinenv
+        virtualenv_python: python2.7
+
+    - name: Copy nginx configuration
+      template:
+        src: files/nginx.conf
+        dest: /etc/nginx/sites-available/nginx.conf
+        owner: root
+        group: sudo
+        mode: 0644
+
+    - name: Deactivate default nginx config
+      file: path=/etc/nginx/sites-enabled/default state=absent
+
+    - name: Link new config
+      file: src=/etc/nginx/sites-available/nginx.conf dest=/etc/nginx/sites-enabled/nginx.conf state=link
+      notify: Restart Nginx
+
+  handlers:
+    - name: Start Nginx
+      service: name=nginx state=started
+      listen: Start Everything
+
+    - name: Restart Nginx
+      service: name=nginx state=restarted
+
+    - name: Start RabbitMQ
+      service: name=rabbitmq-server state=started
+      listen: Start Everything
