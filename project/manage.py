@@ -5,6 +5,9 @@ from api import app, db
 manager = Manager(app)
 manager.add_command("runserver", Server())
 manager.add_command("db", MigrateCommand)
+
+from models import *
+
 migrate = Migrate(app, db)
 
 if __name__ == '__main__':
