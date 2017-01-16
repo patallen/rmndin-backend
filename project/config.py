@@ -1,2 +1,2 @@
-SQLALCHEMY_DATABASE_URI = "posgresql://rmndinuser:rmndinpassword@localhost/rmndindb"
+SQLALCHEMY_DATABASE_URI = "postgresql://rmndinuser:rmndinpassword@localhost/rmndindb"
 SECRET_KEY = 'this is a realllyyy good secret key'
