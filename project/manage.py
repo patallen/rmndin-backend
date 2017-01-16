@@ -6,7 +6,7 @@ manager = Manager(app)
 manager.add_command("runserver", Server())
 manager.add_command("db", MigrateCommand)
 
-from models import *
+import models
 
 migrate = Migrate(app, db)
 
