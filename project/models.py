@@ -23,3 +23,5 @@ class User(BaseMixin, db.Model):
     email = db.Column(db.String(256), nullable=False)
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
+
+    reminders = db.relationship('Reminder', backref='user')
