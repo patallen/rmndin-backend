@@ -12,6 +12,7 @@ class BaseMixin(object):
 class Reminder(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    task_id = db.Column(db.String(36), nullable=False)
     body = db.Column(db.String)
     eta = db.Column(db.DateTime, nullable=False)
     type_ = db.Column(db.String, nullable=False)
