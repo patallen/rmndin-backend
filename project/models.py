@@ -5,7 +5,8 @@ from api import db
 
 class BaseMixin(object):
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    updated = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
+    updated = db.Column(db.DateTime, default=datetime.datetime.utcnow,
+                        onupdate=datetime.datetime.utcnow)
 
 
 class Reminder(BaseMixin, db.Model):
