@@ -22,4 +22,4 @@ def db_upgrade():
 
 def celery_worker():
     with cd('/var/rmndin'):
-        run("/var/rmndinenv/bin/celery -A tasks worker --loglevel=info")
+        run("/var/rmndinenv/bin/celery -A tasks worker --loglevel=debug")
