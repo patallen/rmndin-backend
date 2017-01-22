@@ -1,11 +1,12 @@
-import time, datetime
+import time
+import datetime
 
 from flask import request, jsonify
 
 
 import models
 from api import app, db
-import tasks
+import reminders.helpers
 
 
 @app.route('/add_reminder', methods=['POST'])
@@ -21,7 +22,7 @@ def add_reminder():
     db.session.add(reminder)
     db.session.flush()
 
-    result = tasks.schedule_reminder(reminder)
+    result = reminders.helpers.schedule_reminder(reminder)
 
     reminder.task_id = result.id
     db.session.commit()

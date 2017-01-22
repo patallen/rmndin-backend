@@ -12,14 +12,20 @@ env.password = 'vagrant'
 def runserver():
     run("/var/rmndinenv/bin/python /var/rmndin/manage.py runserver")
 
+
 def db_migrate():
     with cd('/var/rmndin'):
         run("/var/rmndinenv/bin/python /var/rmndin/manage.py db migrate")
+
 
 def db_upgrade():
     with cd('/var/rmndin'):
         run("/var/rmndinenv/bin/python /var/rmndin/manage.py db upgrade")
 
-def celery_worker():
+
+def celery_worker(loglevel="info"):
     with cd('/var/rmndin'):
-        run("/var/rmndinenv/bin/celery -A tasks worker --loglevel=debug")
+        run(
+            "/var/rmndinenv/bin/celery "
+            "-A reminders.tasks worker --loglevel={}".format(loglevel)
+        )
