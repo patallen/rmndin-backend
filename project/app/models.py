@@ -3,7 +3,6 @@ import datetime
 import bcrypt
 
 from app import db
-print db
 
 
 class BaseMixin(object):
@@ -11,12 +10,16 @@ class BaseMixin(object):
     updated = db.Column(db.DateTime, default=datetime.datetime.utcnow,
                         onupdate=datetime.datetime.utcnow)
 
-    def to_dict(self):
-        d = dict()
+    def to_dict(self, exclude=None):
+        if isinstance(exclude, str):
+            exclude = [exclude]
+
+        rv = dict()
         for column in self.__table__.columns:
-            if not column.name.startswith("_"):
-                d[column.name] = str(getattr(self, column.name))
-        return d
+            name = column.name
+            if not name.startswith("_") and name not in exclude:
+                rv[name] = str(getattr(self, name))
+        return rv
 
 
 class Reminder(BaseMixin, db.Model):
@@ -38,7 +41,6 @@ class User(BaseMixin, db.Model):
     _password = db.Column(db.String, nullable=False)
 
     reminders = db.relationship('Reminder', backref='user')
-
 
     @property
     def password(self):
