@@ -11,6 +11,13 @@ class BaseMixin(object):
     updated = db.Column(db.DateTime, default=datetime.datetime.utcnow,
                         onupdate=datetime.datetime.utcnow)
 
+    def to_dict(self):
+        d = dict()
+        for column in self.__table__.columns:
+            if not column.name.startswith("_"):
+                d[column.name] = str(getattr(self, column.name))
+        return d
+
 
 class Reminder(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
