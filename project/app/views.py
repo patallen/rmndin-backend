@@ -31,6 +31,5 @@ def add_reminder():
     # Schedule reminder in celery & set task_id in DB
     # Commit reminder
     # Return reminder JSON
-    rv = reminder.__dict__
-    rv.pop('_sa_instance_state')
+    rv = reminder.to_dict()
     return jsonify(rv)
