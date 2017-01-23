@@ -5,7 +5,7 @@ from flask import Blueprint, request, jsonify
 
 from app import db
 import models
-import reminders.helpers
+from app.reminders.helpers import schedule_reminder
 
 publicbp = Blueprint('public', __name__)
 
@@ -23,7 +23,7 @@ def add_reminder():
     db.session.add(reminder)
     db.session.flush()
 
-    result = reminders.helpers.schedule_reminder(reminder)
+    result = schedule_reminder(reminder)
 
     reminder.task_id = result.id
     db.session.commit()

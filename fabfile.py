@@ -27,5 +27,5 @@ def celery_worker(loglevel="info"):
     with cd('/var/rmndin'):
         run(
             "/var/rmndinenv/bin/celery "
-            "-A reminders.tasks worker --loglevel={}".format(loglevel)
+            "-A app.reminders.tasks worker --loglevel={}".format(loglevel)
         )
