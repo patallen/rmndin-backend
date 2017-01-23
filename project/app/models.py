@@ -1,6 +1,9 @@
 import datetime
 
-from api import db
+import bcrypt
+
+from app import db
+print db
 
 
 class BaseMixin(object):
@@ -25,5 +28,16 @@ class User(BaseMixin, db.Model):
     email = db.Column(db.String(256), nullable=False)
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
+    _password = db.Column(db.String, nullable=False)
 
     reminders = db.relationship('Reminder', backref='user')
+
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, password):
+        self._password = bcrypt.hashpw(password, bcrypt.gensalt(16))
+        return self._password

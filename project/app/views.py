@@ -1,15 +1,16 @@
 import time
 import datetime
 
-from flask import request, jsonify
+from flask import Blueprint, request, jsonify
 
-
+from app import db
 import models
-from api import app, db
 import reminders.helpers
 
+publicbp = Blueprint('public', __name__)
 
-@app.route('/add_reminder', methods=['POST'])
+
+@publicbp.route('/add_reminder', methods=['POST'])
 def add_reminder():
     params = request.get_json()
     url = params.get('url')
