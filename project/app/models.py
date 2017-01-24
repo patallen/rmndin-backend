@@ -11,6 +11,8 @@ class BaseMixin(object):
                         onupdate=datetime.datetime.utcnow)
 
     def to_dict(self, exclude=None):
+        exclude = exclude or []
+
         if isinstance(exclude, str):
             exclude = [exclude]
 
