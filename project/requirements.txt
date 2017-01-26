@@ -5,6 +5,7 @@ billiard==3.5.0.2
 celery==4.0.2
 cffi==1.9.1
 click==6.7
+enum34==1.1.6
 Flask==0.12
 Flask-Migrate==2.0.2
 Flask-Script==2.0.5
