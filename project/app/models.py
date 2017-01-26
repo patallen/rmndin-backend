@@ -1,5 +1,5 @@
 import datetime
-
+import enum
 import bcrypt
 
 from app import db
@@ -24,6 +24,11 @@ class BaseMixin(object):
         return rv
 
 
+class DeliveryMethodEnum(enum.Enum):
+    reddit = 'reddit'
+    email = 'email'
+
+
 class Reminder(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -31,6 +36,8 @@ class Reminder(BaseMixin, db.Model):
     body = db.Column(db.String)
     eta = db.Column(db.DateTime, nullable=False)
     type_ = db.Column(db.String, nullable=False)
+    delivery_method = db.Column(db.Enum(DeliveryMethodEnum), nullable=False)
+
     fulfilled = db.Column(db.String, nullable=False, default=False)
 
 
