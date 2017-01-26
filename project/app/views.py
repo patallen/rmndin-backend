@@ -17,8 +17,12 @@ def add_reminder():
     countdown = params.get('countdown')
     eta = datetime.datetime.fromtimestamp(time.time() + countdown)
     type_ = 'website'
-
-    reminder = models.Reminder(body=url, type_=type_, eta=eta)
+    delivery_method = params.get('delivery_method')
+    print "Delivery Method: %s" % delivery_method
+    reminder = models.Reminder(body=url,
+                               type_=type_,
+                               eta=eta,
+                               delivery_method=delivery_method)
 
     db.session.add(reminder)
     db.session.flush()
@@ -27,9 +31,5 @@ def add_reminder():
 
     reminder.task_id = result.id
     db.session.commit()
-    # Create reminder
-    # Schedule reminder in celery & set task_id in DB
-    # Commit reminder
-    # Return reminder JSON
-    rv = reminder.to_dict()
-    return jsonify(rv)
+
+    return jsonify(reminder.to_dict())
