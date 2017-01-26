@@ -20,13 +20,17 @@ class BaseMixin(object):
         for column in self.__table__.columns:
             name = column.name
             if not name.startswith("_") and name not in exclude:
-                rv[name] = str(getattr(self, name))
+                value = getattr(self, name)
+                if isinstance(value, enum.Enum):
+                    value = value.name
+
+                rv[name] = str(value)
         return rv
 
 
 class DeliveryMethodEnum(enum.Enum):
-    reddit = 'reddit'
-    email = 'email'
+    reddit = "reddit"
+    email = "email"
 
 
 class Reminder(BaseMixin, db.Model):
