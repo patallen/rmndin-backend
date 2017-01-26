@@ -13,9 +13,15 @@ def runserver():
     run("/var/rmndinenv/bin/python /var/rmndin/manage.py runserver")
 
 
-def db_migrate():
+def db_migrate(message=None):
+    if not message:
+        message = ""
+    else:
+        message = '--message "%s"' % message
+
     with cd('/var/rmndin'):
-        run("/var/rmndinenv/bin/python /var/rmndin/manage.py db migrate")
+        run("/var/rmndinenv/bin/python /var/rmndin/manage.py db migrate %s"
+            % message)
 
 
 def db_upgrade():
