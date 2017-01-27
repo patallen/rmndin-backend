@@ -9,6 +9,12 @@ env.user = 'vagrant'
 env.password = 'vagrant'
 
 
+def add_pip_requirement(name, version=None):
+    version = "==%s" % version if version else ""
+    with cd('/var/rmndin'):
+        run("/var/rmndinenv/bin/pip install %s%s" % (name, version))
+        run("/var/rmndinenv/bin/pip freeze > requirements.txt")
+
 def runserver():
     run("/var/rmndinenv/bin/python /var/rmndin/manage.py runserver")
 
