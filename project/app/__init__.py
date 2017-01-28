@@ -5,6 +5,6 @@ app = Flask(__name__)
 app.config.from_pyfile('../config.py')
 db = SQLAlchemy(app)
 
-from views import publicbp
+from views.reminders import reminders as remindersbp
 
-app.register_blueprint(publicbp)
+app.register_blueprint(remindersbp, url_prefix='/reminders')

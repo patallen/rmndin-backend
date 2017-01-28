@@ -4,13 +4,13 @@ import datetime
 from flask import Blueprint, request, jsonify
 
 from app import db
-import models
+from app import models
 from app.reminders.helpers import schedule_reminder
 
-publicbp = Blueprint('public', __name__)
+reminders = Blueprint('reminders', __name__)
 
 
-@publicbp.route('/add_reminder', methods=['POST'])
+@reminders.route('/add', methods=['POST'])
 def add_reminder():
     params = request.get_json()
     url = params.get('url')
@@ -18,7 +18,7 @@ def add_reminder():
     eta = datetime.datetime.fromtimestamp(time.time() + countdown)
     type_ = 'website'
     delivery_method = params.get('delivery_method')
-    print "Delivery Method: %s" % delivery_method
+
     reminder = models.Reminder(body=url,
                                type_=type_,
                                eta=eta,
