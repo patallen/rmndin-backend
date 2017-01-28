@@ -33,7 +33,7 @@ def _check_password(password):
     for regex in (digit_re, upper_re, lower_re):
         valid = regex.search(password) is not None
         if not valid:
-            return False, "must containe uppercase, lowercase, and digit"
+            return False, "must contain uppercase, lowercase, and a digit"
 
     return (True, None)
 

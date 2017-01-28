@@ -16,10 +16,10 @@ def create_user():
     for param in check:
         value = params.get(param)
         if value is None:
-            errors_by_param[param] = "Cannot not be blank."
+            errors_by_param[param] = "cannot not be blank"
         elif param == "confirm":
             if params.get('confirm') != params.get('password'):
-                errors_by_param[param] = "Does not match."
+                errors_by_param[param] = "does not match"
         else:
             valid, error = check_user_param(param, value)
             if not valid:
