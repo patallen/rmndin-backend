@@ -63,3 +63,7 @@ class User(BaseMixin, db.Model):
     def password(self, password):
         self._password = bcrypt.hashpw(password, bcrypt.gensalt(16))
         return self._password
+
+    @property
+    def alias(self):
+        return self.first_name or self.username
