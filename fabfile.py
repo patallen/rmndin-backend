@@ -20,7 +20,7 @@ def runserver():
 
 
 def db_migrate(message):
-    message = '--message "%s"' % message
+    message = "-m '%s'" % message
 
     with cd('/var/rmndin'):
         run("/var/rmndinenv/bin/python /var/rmndin/manage.py db migrate %s"
