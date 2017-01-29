@@ -69,6 +69,21 @@ class User(BaseMixin, db.Model):
     def alias(self):
         return self.first_name or self.username
 
+    def authenticate(self, password):
+        pw = password.encode('utf-8')
+        hashed = self._password.encode('utf-8')
+        return bcrypt.checkpw(pw, hashed)
+
+    @classmethod
+    def get_authed_user(cls, username, password):
+        user = cls.query.filter(cls.username == username).first()
+        if not user:
+            return None
+        authed = user.authenticate(password)
+        if authed:
+            return user
+        return False
+
 
 class UserContact(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

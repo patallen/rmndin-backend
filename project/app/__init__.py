@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_jwt import JWT
 import yaml
 
 
@@ -13,6 +13,11 @@ app = Flask(__name__)
 app.config.from_pyfile('/var/rmndin/config.py')
 yaml_update_config(app, '/var/rmndin/private.yaml')
 db = SQLAlchemy(app)
+
+
+from app.jwt import authenticate, identity
+jwt = JWT(app, authenticate, identity)
+
 
 from views.reminders import reminders as remindersbp
 from views.users import users as usersbp
