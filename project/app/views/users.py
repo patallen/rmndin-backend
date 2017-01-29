@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 from app import db
-from app.models import User
+from app.models import User, UserContact
 from app.views.helpers.users import check_user_param
-
+from pprint import pprint
 
 users = Blueprint('users', __name__)
 
@@ -42,3 +42,19 @@ def create_user():
     db.session.commit()
 
     return jsonify(user.to_dict())
+
+
+@users.route('/contacts', methods=['POST'])
+def create_contact():
+    params = request.get_json()
+    identifier = params.get('identifier')
+    method = params.get('method')
+    user = db.session.query(User).filter(User.username == "pat").first()
+
+    contact = UserContact(method=method,
+                          identifier=identifier,
+                          user_id=user.id)
+    db.session.add(contact)
+    db.session.commit()
+    pprint(user.contacts)
+    return jsonify(contact.to_dict())

@@ -54,6 +54,7 @@ class User(BaseMixin, db.Model):
     _password = db.Column(db.String, nullable=False)
 
     reminders = db.relationship('Reminder', backref='user')
+    contacts = db.relationship('UserContact', backref='user')
 
     @property
     def password(self):
@@ -67,3 +68,11 @@ class User(BaseMixin, db.Model):
     @property
     def alias(self):
         return self.first_name or self.username
+
+
+class UserContact(BaseMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    verified = db.Column(db.Boolean, nullable=False, default=False)
+    method = db.Column(db.Enum(DeliveryMethodEnum), nullable=False)
+    identifier = db.Column(db.String(256), nullable=False)
