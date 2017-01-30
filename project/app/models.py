@@ -96,7 +96,7 @@ class UserContact(BaseMixin, db.Model):
 
     def get_vehicle(self):
         if self.method == DeliveryMethodEnum.reddit:
-            veh = RedditContactVehicle(identifier=self.identifier,
+            veh = RedditContactVehicle(user_contact=self,
                                        verified=self.verified)
         # elif self.method == DeliveryMethodEnum.email:
         #     veh = EmailVehicle(email=self.identifier,

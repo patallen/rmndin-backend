@@ -1,9 +1,12 @@
+from flask import jsonify
+
 from app import app
-from app.contacts import verification
+from app.views.helpers import contacts
+
 
 @app.route('/verify/<hashed_key>')
 def verify_contact(hashed_key):
-	contact = verification.verify_contact(hashed_key)
+	contact = contacts.verify_contact(hashed_key)
 	if not contact:
 		return "Invalid verification link"
-	return contact.to_dict()
+	return jsonify(contact.to_dict())

@@ -4,7 +4,7 @@ from flask_jwt import current_identity, jwt_required
 from app import db
 from app.models import User
 from app.views.helpers.users import check_user_param
-from app.contacts import verification
+from app.views.helpers.contacts import create_contact
 
 
 users = Blueprint('users', __name__)
@@ -49,12 +49,12 @@ def create_user():
 
 @users.route('/contacts', methods=['POST'])
 @jwt_required()
-def create_contact():
+def create_user_contact():
     params = request.get_json()
     identifier = params.get('identifier')
     method = params.get('method')
     print "Creating contact..."
-    val, result = verification.create_contact(current_identity.id, method, identifier)
+    val, result = create_contact(current_identity.id, method, identifier)
     print val, result
     return jsonify(result)
 
