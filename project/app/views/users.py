@@ -58,10 +58,10 @@ def create_contact():
     print val, result
     return jsonify(result)
 
-    contact = UserContact(method=method,
-                          identifier=identifier,
-                          user_id=user.id)
-    db.session.add(contact)
-    db.session.commit()
-    pprint(user.contacts)
-    return jsonify(contact.to_dict())
+
+@users.route('/contacts', methods=['GET'])
+@jwt_required()
+def get_contacts():
+    user = current_identity
+    contacts = [u.to_dict() for u in user.contacts if u.verified]
+    return jsonify(contacts)
