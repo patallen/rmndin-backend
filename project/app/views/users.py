@@ -1,8 +1,11 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
+from flask_jwt import current_identity, jwt_required
+
 from app import db
-from app.models import User, UserContact
+from app.models import User
 from app.views.helpers.users import check_user_param
-from pprint import pprint
+from app.contacts import verification
+
 
 users = Blueprint('users', __name__)
 
@@ -45,11 +48,15 @@ def create_user():
 
 
 @users.route('/contacts', methods=['POST'])
+@jwt_required()
 def create_contact():
     params = request.get_json()
     identifier = params.get('identifier')
     method = params.get('method')
-    user = db.session.query(User).filter(User.username == "pat").first()
+    print "Creating contact..."
+    val, result = verification.create_contact(current_identity.id, method, identifier)
+    print val, result
+    return jsonify(result)
 
     contact = UserContact(method=method,
                           identifier=identifier,
