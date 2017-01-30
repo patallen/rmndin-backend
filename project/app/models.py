@@ -4,6 +4,8 @@ import bcrypt
 
 from app import db
 
+from app.reminders.vehicles import RedditVehicle
+
 
 class BaseMixin(object):
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -91,3 +93,15 @@ class UserContact(BaseMixin, db.Model):
     verified = db.Column(db.Boolean, nullable=False, default=False)
     method = db.Column(db.Enum(DeliveryMethodEnum), nullable=False)
     identifier = db.Column(db.String(256), nullable=False)
+
+    def get_vehicle(self):
+        if self.method == DeliveryMethodEnum.reddit:
+            veh = RedditVehicle(identifier=self.identifier,
+                                verified=self.verified)
+        # elif self.method == DeliveryMethodEnum.email:
+        #     veh = EmailVehicle(email=self.identifier,
+        #                        verified=self.verified)
+        else:
+            veh = None
+
+        return veh
