@@ -15,8 +15,8 @@ yaml_update_config(app, '/var/rmndin/private.yml')
 db = SQLAlchemy(app)
 
 
-from rmndin.jwt import authenticate, identity
-jwt = JWT(app, authenticate, identity)
+from rmndin.auth import jwt
+jwt = JWT(app, jwt.authenticate, jwt.identity)
 
 
 from views.reminders import reminders as remindersbp
