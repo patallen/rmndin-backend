@@ -5,9 +5,14 @@ from app import db
 from app.models import User
 from app.views.helpers.users import check_user_param
 from app.views.helpers.contacts import create_contact
+from app.contacts.verification import email_verify_url
 
 
 users = Blueprint('users', __name__)
+
+
+def send_email_verification(email):
+    print email_verify_url(email)
 
 
 @users.route('/create', methods=["POST"])
@@ -43,7 +48,7 @@ def create_user():
 
     db.session.add(user)
     db.session.commit()
-
+    send_email_verification(email=user.email)
     return jsonify(user.to_dict())
 
 

@@ -1,7 +1,7 @@
 """Why the hell do I need a docstring here?."""
 import praw
 from app import app
-from app.contacts.verification import create_verify_url
+from app.contacts.verification import contact_verify_url
 
 reddit = praw.Reddit(user_agent=app.config['REDDIT_USER_AGENT'],
                      client_id=app.config['REDDIT_CLIENT_ID'],
@@ -49,6 +49,6 @@ class RedditContactVehicle(ContactVehicle):
     def send_verification(self):
         redditor = praw.models.Redditor(self.client,
                                         name=self.contact.identifier)
-        url = create_verify_url(self.contact.id)
+        url = contact_verify_url(self.contact.id)
         redditor.message("Verify your username!", url)
         print "Sending reddit verification to %s!" % self.contact.identifier

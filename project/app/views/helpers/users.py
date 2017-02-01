@@ -1,7 +1,8 @@
 import re
 
 from app import db
-from app.models import User
+from app.models import User, UserContact
+from app.contacts.verification import deserialize_key
 
 
 def _check_username(username):
@@ -68,3 +69,25 @@ def check_user_param(param, value):
         raise Exception("Invalid parameter name: %s" % param)
 
     return rv
+
+
+def verify_user(hashed_key):
+    try:
+        info = deserialize_key(hashed_key)
+    except Exception as e:
+        print(e)
+        return False, "invalid key"
+
+    email = info.get('email')
+    user = User.query.filter_by(email=email).first()
+
+    if user and user.verified:
+        return False, "already verified"
+    elif user and not user.verified:
+        user.verified = True
+        contact = UserContact(method='email', identifier=email, verified=True)
+        db.session.add(user, contact)
+        db.session.commit()
+        return True, None
+    else:
+        return False, "invalid key"
