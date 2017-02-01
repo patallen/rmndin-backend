@@ -1,9 +1,9 @@
 import bcrypt
 from rmndin import db
+
 from rmndin.lib.db.mixins import BaseMixin
 from rmndin.lib.db.enums import DeliveryMethodEnum
-
-from rmndin.contacts.vehicles import RedditContactVehicle
+from rmndin.lib.vehicles import RedditContactVehicle
 
 
 class User(BaseMixin, db.Model):

@@ -1,8 +1,8 @@
 import re
 
-from rmndin import db
+from rmndin import app, db
 from rmndin.users.models import User, UserContact
-from rmndin.contacts.verification import deserialize_key
+from rmndin.lib.verification import deserialize_key
 
 
 def _check_username(username):
@@ -72,8 +72,10 @@ def check_user_param(param, value):
 
 
 def verify_user(hashed_key):
+    secret_key = app.config['CONTACT_VERIFY_SECRET']
+    max_age = app.config['CONTACT_VERIFY_MAX_AGE']
     try:
-        info = deserialize_key(hashed_key)
+        info = deserialize_key(hashed_key, secret_key, max_age)
     except Exception as e:
         print(e)
         return False, "invalid key"

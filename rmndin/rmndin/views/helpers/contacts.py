@@ -1,8 +1,8 @@
-from rmndin import db
+from rmndin import app, db
 from rmndin.users.models import UserContact
 from rmndin.lib.db.enums import DeliveryMethodEnum
 
-from rmndin.contacts.verification import deserialize_key
+from rmndin.lib.verification import deserialize_key
 
 
 def create_contact(user_id, method, identifier):
@@ -40,8 +40,10 @@ def create_contact(user_id, method, identifier):
 
 
 def verify_contact(hashed_key):
+    secret_key = app.config['CONTACT_VERIFY_SECRET']
+    max_age = app.config['CONTACT_VERIFY_MAX_AGE']
     try:
-        info = deserialize_key(hashed_key)
+        info = deserialize_key(hashed_key, secret_key, max_age)
     except Exception as e:
         print(e)
         return False
