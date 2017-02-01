@@ -1,5 +1,5 @@
 from rmndin import db
-from rmndin.models import Reminder
+from rmndin.reminders.models import Reminder
 from rmndin.reminders import celery
 
 

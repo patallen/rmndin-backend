@@ -1,10 +1,8 @@
-import enum
-
 from rmndin import db
-
-from rmndin.contacts.vehicles import RedditContactVehicle
 from rmndin.lib.db.mixins import BaseMixin
 from rmndin.lib.db.enums import DeliveryMethodEnum
+
+from rmndin.contacts.vehicles import RedditContactVehicle
 
 
 class Reminder(BaseMixin, db.Model):
