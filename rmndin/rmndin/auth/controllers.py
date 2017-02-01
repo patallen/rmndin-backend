@@ -30,7 +30,7 @@ def user_registration(params):
         errors_by_param['password'] = password_errors
 
     check, email_errors = validate_email(email)
-    print check, email_errors
+
     if not check:
         errors_by_param['email'] = email_errors
 
@@ -50,14 +50,10 @@ def user_registration(params):
     first_name = params.get('first_name')
     last_name = params.get('last_name')
 
-    user = User(username=params.get('username'),
-                password=params.get('password').encode('utf-8'),
-                email=params.get('email'),
-                first_name=first_name,
-                last_name=last_name)
-
-    db.session.add(user)
-    db.session.commit()
+    user = User.create(username=params.get('username'),
+                       password=params.get('password').encode('utf-8'),
+                       email=params.get('email'), first_name=first_name,
+                       last_name=last_name)
 
     _send_email_verification(email=user.email)
 
