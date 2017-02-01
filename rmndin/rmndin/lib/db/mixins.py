@@ -27,6 +27,16 @@ class BaseMixin(object):
         return rv
 
     @classmethod
+    def exists_by_key(cls, key, value, case_sensitive=True):
+        column = getattr(cls, key)
+        query = db.session.query(cls)
+        if case_sensitive:
+            query = query.filter(column.ilike(value))
+        else:
+            query = query.filter(column == value)
+        return query.count() > 0
+
+    @classmethod
     def create(cls, add=True, commit=True, *args, **kwargs):
         obj = cls(*args, **kwargs)
         if add:
