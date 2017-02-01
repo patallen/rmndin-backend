@@ -1,4 +1,4 @@
-from rmndin.models import User
+from rmndin.users.models import User
 
 
 def authenticate(username, password):

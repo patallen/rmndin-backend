@@ -1,5 +1,6 @@
 from rmndin import db
-from rmndin.models import UserContact, DeliveryMethodEnum
+from rmndin.users.models import UserContact
+from rmndin.lib.db.enums import DeliveryMethodEnum
 
 from rmndin.contacts.verification import deserialize_key
 

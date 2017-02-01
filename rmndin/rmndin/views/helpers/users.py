@@ -1,7 +1,7 @@
 import re
 
 from rmndin import db
-from rmndin.models import User, UserContact
+from rmndin.users.models import User, UserContact
 from rmndin.contacts.verification import deserialize_key
 
 

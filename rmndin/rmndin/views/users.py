@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt import current_identity, jwt_required
 
 from rmndin import db
-from rmndin.models import User
+from rmndin.users.models import User
 from rmndin.views.helpers.users import check_user_param
 from rmndin.views.helpers.contacts import create_contact
 from rmndin.contacts.verification import email_verify_url
