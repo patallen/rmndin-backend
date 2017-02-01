@@ -7,8 +7,11 @@ from rmndin.views.helpers.users import check_user_param
 from rmndin.views.helpers.contacts import create_contact
 from rmndin.lib.verification import email_verify_url
 
+from rmndin.views import helpers
+
 
 users = Blueprint('users', __name__)
+verify = Blueprint('verify', __name__)
 
 
 def send_email_verification(email):
@@ -72,3 +75,21 @@ def get_contacts():
     user = current_identity
     contacts = [u.to_dict() for u in user.contacts if u.verified]
     return jsonify(contacts)
+
+
+@verify.route('/contact/<hashed_key>')
+def verify_contact(hashed_key):
+    contact = helpers.contacts.verify_contact(hashed_key)
+    if not contact:
+        return "Invalid verification link."
+    return jsonify(contact.to_dict())
+
+
+@verify.route('/email/<hashed_key>')
+def verify_email(hashed_key):
+    user, code = helpers.users.verify_user(hashed_key)
+    if not user:
+        msg = "Could not verify due to %s." % code
+    else:
+        msg = "Success! Please log in :)"
+    return jsonify(msg)
