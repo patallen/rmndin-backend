@@ -25,3 +25,16 @@ class BaseMixin(object):
 
                 rv[name] = str(value)
         return rv
+
+    @classmethod
+    def create(cls, add=True, commit=True, *args, **kwargs):
+        obj = cls(*args, **kwargs)
+        if add:
+            db.session.add(obj)
+            if commit:
+                try:
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+                    raise
+        return obj
