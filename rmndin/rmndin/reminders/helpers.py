@@ -1,6 +1,6 @@
 from rmndin.reminders import celery
 
-import rmndin.reminders.tasks
+import rmndin.tasks
 
 
 def cancel_reminder(reminder):
