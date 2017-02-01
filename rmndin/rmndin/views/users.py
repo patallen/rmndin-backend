@@ -1,18 +1,20 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt import current_identity, jwt_required
 
-from rmndin import db
+from rmndin import app, db
 from rmndin.users.models import User
 from rmndin.views.helpers.users import check_user_param
 from rmndin.views.helpers.contacts import create_contact
-from rmndin.contacts.verification import email_verify_url
+from rmndin.lib.verification import email_verify_url
 
 
 users = Blueprint('users', __name__)
 
 
 def send_email_verification(email):
-    print email_verify_url(email)
+    secret_key = app.config['CONTACT_VERIFY_SECRET']
+    base_url = app.config['URLS']['BASE_URL']
+    print email_verify_url(email, base_url, secret_key)
 
 
 @users.route('/create', methods=["POST"])
