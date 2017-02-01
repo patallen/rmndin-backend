@@ -1,7 +1,5 @@
-from rmndin import app, db
+from rmndin import app
 from rmndin.auth.validation import (
-    email_available,
-    username_available,
     validate_username,
     validate_password,
     validate_confirmation_pass,
@@ -38,10 +36,10 @@ def user_registration(params):
     if not check:
         errors_by_param['confirm'] = confirm_errors
 
-    if not username_available(username):
+    if User.exists_by_key('username', value=username, case_sensitive=False):
         errors_by_param['username'] = ["Username is not available."]
 
-    if not email_available(email):
+    if User.exists_by_key('email', value=email, case_sensitive=False):
         errors_by_param['email'] = ["Email address is not available."]
 
     if len(errors_by_param):

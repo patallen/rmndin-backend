@@ -1,6 +1,5 @@
 import re
 
-
 from rmndin.users.models import User
 
 
@@ -50,13 +49,3 @@ def validate_email(email):
         return False, ["Not a valid email address."]
 
     return (True, [])
-
-
-def email_available(email):
-    count = User.query.filter(User.email.ilike(email)).count()
-    return count < 1
-
-
-def username_available(username):
-    count = User.query.filter(User.username.ilike(username)).count()
-    return count < 1
