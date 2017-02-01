@@ -19,7 +19,7 @@ from rmndin.auth import jwt
 jwt = JWT(app, jwt.authenticate, jwt.identity)
 
 
-from views.reminders import reminders as remindersbp
+from rmndin.reminders.views import reminders as remindersbp
 from views.users import users as usersbp
 
 app.register_blueprint(remindersbp, url_prefix='/reminders')
