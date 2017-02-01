@@ -2,9 +2,9 @@ import datetime
 import enum
 import bcrypt
 
-from app import db
+from rmndin import db
 
-from app.contacts.vehicles import RedditContactVehicle
+from rmndin.contacts.vehicles import RedditContactVehicle
 
 
 class BaseMixin(object):

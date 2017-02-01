@@ -1,6 +1,6 @@
 from itsdangerous import URLSafeTimedSerializer
 
-from app import app
+from rmndin import app
 
 
 def serialize_key(payload):

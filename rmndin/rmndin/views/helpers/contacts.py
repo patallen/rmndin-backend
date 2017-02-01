@@ -1,7 +1,7 @@
-from app import db
-from app.models import UserContact, DeliveryMethodEnum
+from rmndin import db
+from rmndin.models import UserContact, DeliveryMethodEnum
 
-from app.contacts.verification import deserialize_key
+from rmndin.contacts.verification import deserialize_key
 
 
 def create_contact(user_id, method, identifier):

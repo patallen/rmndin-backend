@@ -1,8 +1,8 @@
 import re
 
-from app import db
-from app.models import User, UserContact
-from app.contacts.verification import deserialize_key
+from rmndin import db
+from rmndin.models import User, UserContact
+from rmndin.contacts.verification import deserialize_key
 
 
 def _check_username(username):

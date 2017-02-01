@@ -1,7 +1,7 @@
 """Why the hell do I need a docstring here?."""
 import praw
-from app import app
-from app.contacts.verification import contact_verify_url
+from rmndin import app
+from rmndin.contacts.verification import contact_verify_url
 
 reddit = praw.Reddit(user_agent=app.config['REDDIT_USER_AGENT'],
                      client_id=app.config['REDDIT_CLIENT_ID'],

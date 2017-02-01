@@ -1,6 +1,6 @@
-from app import db
-from app.models import Reminder
-from app.reminders import celery
+from rmndin import db
+from rmndin.models import Reminder
+from rmndin.reminders import celery
 
 
 @celery.task

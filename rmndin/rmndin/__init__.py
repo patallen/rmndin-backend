@@ -11,11 +11,11 @@ def yaml_update_config(app, path):
 
 app = Flask(__name__)
 app.config.from_pyfile('/var/rmndin/config.py')
-yaml_update_config(app, '/var/rmndin/private.yaml')
+yaml_update_config(app, '/var/rmndin/private.yml')
 db = SQLAlchemy(app)
 
 
-from app.jwt import authenticate, identity
+from rmndin.jwt import authenticate, identity
 jwt = JWT(app, authenticate, identity)
 
 

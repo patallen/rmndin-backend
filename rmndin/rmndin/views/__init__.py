@@ -1,7 +1,7 @@
 from flask import jsonify
 
-from app import app
-from app.views import helpers
+from rmndin import app
+from rmndin.views import helpers
 
 
 @app.route('/verify/contact/<hashed_key>')

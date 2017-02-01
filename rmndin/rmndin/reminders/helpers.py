@@ -1,6 +1,6 @@
-from app.reminders import celery
+from rmndin.reminders import celery
 
-import app.reminders.tasks
+import rmndin.reminders.tasks
 
 
 def cancel_reminder(reminder):
@@ -10,7 +10,7 @@ def cancel_reminder(reminder):
 
 
 def schedule_reminder(reminder):
-    result = app.reminders.tasks.schedule_reminder.apply_async(
+    result = rmndin.reminders.tasks.schedule_reminder.apply_async(
         eta=reminder.eta,
         args=[reminder.id]
     )

@@ -3,9 +3,9 @@ import datetime
 
 from flask import Blueprint, request, jsonify
 
-from app import db
-from app import models
-from app.reminders.helpers import schedule_reminder
+from rmndin import db
+from rmndin import models
+from rmndin.reminders.helpers import schedule_reminder
 
 reminders = Blueprint('reminders', __name__)
 

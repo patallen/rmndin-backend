@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt import current_identity, jwt_required
 
-from app import db
-from app.models import User
-from app.views.helpers.users import check_user_param
-from app.views.helpers.contacts import create_contact
-from app.contacts.verification import email_verify_url
+from rmndin import db
+from rmndin.models import User
+from rmndin.views.helpers.users import check_user_param
+from rmndin.views.helpers.contacts import create_contact
+from rmndin.contacts.verification import email_verify_url
 
 
 users = Blueprint('users', __name__)
