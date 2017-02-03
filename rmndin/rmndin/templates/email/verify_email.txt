@@ -1,0 +1,9 @@
+Hi, {{username}}!
+\n\n
+Welcome to rmnd.in. Please verify your email by clicking the following link:
+\n\n
+{{verify_link}}
+\n\n
+Regards,
+\n
+Rmnd.in Staff
