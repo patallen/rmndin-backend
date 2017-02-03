@@ -34,8 +34,8 @@
 
     - name: Copy nginx configuration
       template:
-        src: files/nginx.conf
-        dest: /etc/nginx/sites-available/nginx.conf
+        src: files/rmndin
+        dest: /etc/nginx/sites-available/rmndin
         owner: root
         group: sudo
         mode: 0644
@@ -44,7 +44,7 @@
       file: path=/etc/nginx/sites-enabled/default state=absent
 
     - name: Link new config
-      file: src=/etc/nginx/sites-available/nginx.conf dest=/etc/nginx/sites-enabled/nginx.conf state=link
+      file: src=/etc/nginx/sites-available/rmndin dest=/etc/nginx/sites-enabled/rmndin state=link
       notify: Restart Nginx
 
   handlers:

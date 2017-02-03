@@ -1,7 +1,7 @@
 server {
     listen 80;
 
-    server_name api.rmndin.dev;
+    server_name rmndin.dev www.rmndin.dev;
     charset utf-8;
 
     access_log  /var/log/nginx/access.log;

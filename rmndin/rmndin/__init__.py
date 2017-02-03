@@ -24,7 +24,7 @@ from rmndin.users.views import usersbp as users
 from rmndin.users.views import verifybp as verify
 from rmndin.auth.views import bp as auth
 
-app.register_blueprint(reminders, url_prefix='/reminders')
-app.register_blueprint(users, url_prefix='/users')
+app.register_blueprint(reminders, url_prefix='/api/reminders')
+app.register_blueprint(users, url_prefix='/api/users')
 app.register_blueprint(verify, url_prefix='/verify')
 app.register_blueprint(auth)
