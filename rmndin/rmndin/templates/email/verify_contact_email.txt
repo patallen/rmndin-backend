@@ -1,0 +1,9 @@
+Hi, {{username}}!
+
+You have just added an Email contact with us at Rmnd.in. Please click the following link to verify:
+
+{{verify_link}}
+
+Regards,
+
+Rmnd.in Staff

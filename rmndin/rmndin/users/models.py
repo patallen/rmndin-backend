@@ -3,7 +3,7 @@ from rmndin import db
 
 from rmndin.lib.db.mixins import BaseMixin
 from rmndin.lib.db.enums import DeliveryMethodEnum
-from rmndin.lib.vehicles import RedditContactVehicle
+from rmndin.lib import vehicles
 
 
 class User(BaseMixin, db.Model):
@@ -58,11 +58,11 @@ class UserContact(BaseMixin, db.Model):
 
     def get_vehicle(self):
         if self.method == DeliveryMethodEnum.reddit:
-            veh = RedditContactVehicle(user_contact=self,
-                                       verified=self.verified)
-        # elif self.method == DeliveryMethodEnum.email:
-        #     veh = EmailVehicle(email=self.identifier,
-        #                        verified=self.verified)
+            veh = vehicles.RedditContactVehicle(user_contact=self,
+                                                verified=self.verified)
+        elif self.method == DeliveryMethodEnum.email:
+            veh = vehicles.EmailContactVehicle(user_contact=self,
+                                               verified=self.verified)
         else:
             veh = None
 
