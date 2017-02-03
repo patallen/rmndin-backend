@@ -83,8 +83,10 @@ def verify_user(hashed_key):
         return {"error": "You are already verified. Log in."}
     elif user and not user.verified:
         user.verified = True
-        contact = UserContact(method='email', identifier=email, verified=True)
-        db.session.add(user, contact)
+        contact = UserContact(method='email', identifier=email,
+                              verified=True, user_id=user.id)
+        db.session.add(user)
+        db.session.add(contact)
         db.session.commit()
         return {"success": "You are now verified! Please log in."}
     else:
