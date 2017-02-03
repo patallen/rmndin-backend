@@ -6,6 +6,7 @@ from rmndin.auth.validation import (
     validate_email,
 )
 from rmndin.lib.verification import email_verify_url
+from rmndin.services.email import send_template_email
 from rmndin.users.models import User
 
 
@@ -53,13 +54,21 @@ def user_registration(params):
                        email=params.get('email'), first_name=first_name,
                        last_name=last_name)
 
-    _send_email_verification(email=user.email)
+    _send_email_verification(email=user.email, username=user.username)
 
     return {"success": user.to_dict()}
 
 
-def _send_email_verification(email):
+def _send_email_verification(email, username):
     secret_key = app.config['CONTACT_VERIFY_SECRET']
     base_url = app.config['URLS']['BASE_URL']
     url = email_verify_url(email, base_url, secret_key)
-    print url
+    variables = {
+        "verify_link": url,
+        "username": username
+    }
+    subject = "Verify your Rmnd.in email address"
+    from_email = "account@rmnd.in"
+    return send_template_email(recipients=[email], subject=subject,
+                               from_address=from_email, variables=variables,
+                               template="email/verify_email")
