@@ -4,11 +4,11 @@ from flask_jwt import current_identity, jwt_required
 from rmndin.users import controllers
 
 
-users = Blueprint('users', __name__)
-verify = Blueprint('verify', __name__)
+usersbp = Blueprint('users', __name__)
+verifybp = Blueprint('verify', __name__)
 
 
-@users.route('/contacts', methods=['POST'])
+@usersbp.route('/contacts', methods=['POST'])
 @jwt_required()
 def create_user_contact():
     params = request.get_json()
@@ -16,7 +16,7 @@ def create_user_contact():
     return jsonify(rv)
 
 
-@users.route('/contacts', methods=['GET'])
+@usersbp.route('/contacts', methods=['GET'])
 @jwt_required()
 def get_contacts():
     user = current_identity
@@ -24,13 +24,13 @@ def get_contacts():
     return jsonify(contacts)
 
 
-@verify.route('/contact/<hashed_key>')
+@verifybp.route('/contact/<hashed_key>')
 def verify_contact(hashed_key):
     rv = controllers.verify_contact(hashed_key)
     return jsonify(rv)
 
 
-@verify.route('/email/<hashed_key>')
+@verifybp.route('/email/<hashed_key>')
 def verify_email(hashed_key):
     rv = controllers.verify_user(hashed_key)
     return jsonify(rv)

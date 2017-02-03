@@ -7,10 +7,10 @@ from rmndin import db
 from rmndin.reminders import models
 from rmndin.reminders.helpers import schedule_reminder
 
-reminders = Blueprint('reminders', __name__)
+bp = Blueprint('reminders', __name__)
 
 
-@reminders.route('/add', methods=['POST'])
+@bp.route('/add', methods=['POST'])
 def add_reminder():
     params = request.get_json()
     url = params.get('url')

@@ -19,12 +19,12 @@ from rmndin.auth import jwt
 jwt = JWT(app, jwt.authenticate, jwt.identity)
 
 
-from rmndin.reminders.views import reminders as remindersbp
-from rmndin.users.views import users as usersbp
-from rmndin.users.views import verify as verifybp
-from rmndin.auth.views import auth as authbp
+from rmndin.reminders.views import bp as reminders
+from rmndin.users.views import usersbp as users
+from rmndin.users.views import verifybp as verify
+from rmndin.auth.views import bp as auth
 
-app.register_blueprint(remindersbp, url_prefix='/reminders')
-app.register_blueprint(usersbp, url_prefix='/users')
-app.register_blueprint(verifybp, url_prefix='/verify')
-app.register_blueprint(authbp)
+app.register_blueprint(reminders, url_prefix='/reminders')
+app.register_blueprint(users, url_prefix='/users')
+app.register_blueprint(verify, url_prefix='/verify')
+app.register_blueprint(auth)
