@@ -23,20 +23,10 @@ class Reminder(BaseMixin, db.Model):
     __repr_columns__ = ['user_id', 'body', 'eta']
 
     def add_contact(self, contact, commit=True):
-        self.contacts.append(contact)
-        db.session.add(self)
-        if commit:
-            try:
-                db.session.commit()
-            except:
-                db.session.rollback()
-                raise
+        self.add_contacts([contact], commit=commit)
 
     def add_contacts(self, contacts, commit=True):
         for contact in contacts:
             self.contacts.append(contact)
 
-        self.session.add(self)
-
-        if commit:
-            self.session.commit()
+        self.save()

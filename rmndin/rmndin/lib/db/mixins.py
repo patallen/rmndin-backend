@@ -2,6 +2,7 @@ import datetime
 import enum
 import warnings
 
+import rmndin
 from rmndin import db
 
 
@@ -66,13 +67,19 @@ class BaseMixin(object):
 
     @classmethod
     def create(cls, add=True, commit=True, *args, **kwargs):
+        """Create the model instance. Add and commit as requested."""
         obj = cls(*args, **kwargs)
         if add:
             db.session.add(obj)
             if commit:
-                try:
-                    db.session.commit()
-                except:
-                    db.session.rollback()
-                    raise
+                rmndin.lib.db.commit_session(db)
         return obj
+
+    def commit_session(self):
+        """Commit the session."""
+        rmndin.lib.db.commit_session(self.db)
+
+    def save(self):
+        """Add instance to the session and commit."""
+        self.session.add(self)
+        self.commit_session()
