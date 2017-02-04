@@ -18,6 +18,7 @@ class User(BaseMixin, db.Model):
     reminders = db.relationship('Reminder', backref='user')
     contacts = db.relationship('UserContact', backref='user')
 
+    __repr_columns__ = ["username", "verified"]
 
     @property
     def password(self):
