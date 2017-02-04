@@ -11,6 +11,8 @@ class BaseMixin(object):
     updated = db.Column(db.DateTime, default=datetime.datetime.utcnow,
                         onupdate=datetime.datetime.utcnow)
 
+    __default_excludes__ = []
+
     def __init__(self, *args, **kwargs):
         """Initialize. Set the db and session."""
         super(BaseMixin, self).__init__(*args, **kwargs)
@@ -41,6 +43,7 @@ class BaseMixin(object):
     def to_dict(self, exclude=None):
         """Return a dictionary of the model instance."""
         exclude = exclude or []
+        exclude.extend(self.__default_excludes__)
 
         if isinstance(exclude, str):
             exclude = [exclude]
