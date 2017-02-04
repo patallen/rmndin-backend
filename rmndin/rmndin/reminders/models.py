@@ -31,3 +31,10 @@ class Reminder(BaseMixin, db.Model):
             self.contacts.append(contact)
         if commit:
             self.commit_session()
+
+    def to_dict(self, include_contacts=False, *args, **kwargs):
+        rv = super(Reminder, self).to_dict(*args, **kwargs)
+        if include_contacts:
+            excl = ['created', 'updated']
+            rv["contacts"] = [c.to_dict(exclude=excl) for c in self.contacts]
+        return rv
