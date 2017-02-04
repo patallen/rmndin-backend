@@ -14,11 +14,20 @@ BIN_PATH = '%s/bin' % VENVPATH
 
 FLASK_APP = 'manage.py'
 APP_PATH = '%s/%s' % (BASEPATH, FLASK_APP)
+ENVIRONMENT = {
+    "FLASK_DEBUG": 1,
+    "FLASK_APP": "%s/%s" %(BASEPATH, FLASK_APP)
+}
+
+
+def envars():
+    envars = ["%s=%s" % (k, v) for k, v in ENVIRONMENT.iteritems()]
+    return " ".join(envars)
 
 
 def command(command):
     with cd('/var/rmndin'):
-        run('FLASK_APP=%s %s/flask %s' % (APP_PATH, BIN_PATH, command))
+        run('%s %s/flask %s' % (envars(), BIN_PATH, command))
 
 
 def add_requirement(name, version=None):
