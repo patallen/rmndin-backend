@@ -1,6 +1,5 @@
 from rmndin import db
 from rmndin.lib.db.mixins import BaseMixin
-from rmndin.lib.db.enums import DeliveryMethodEnum
 
 
 class Reminder(BaseMixin, db.Model):
@@ -9,7 +8,4 @@ class Reminder(BaseMixin, db.Model):
     task_id = db.Column(db.String(36), nullable=True)
     body = db.Column(db.String)
     eta = db.Column(db.DateTime, nullable=False)
-    type_ = db.Column(db.String, nullable=False)
-    delivery_method = db.Column(db.Enum(DeliveryMethodEnum), nullable=False)
-
-    fulfilled = db.Column(db.String, nullable=False, default=False)
+    fulfilled = db.Column(db.Boolean, nullable=False, default=False)
