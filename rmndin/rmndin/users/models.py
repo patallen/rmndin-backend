@@ -48,6 +48,13 @@ class User(BaseMixin, db.Model):
             return user
         return False
 
+    def owns_contact_ids(self, contact_ids):
+        owned_ids = [con.id for con in self.contacts if con.verified]
+        return all([c in owned_ids for c in contact_ids])
+
+    def contacts_for_ids(self, contact_ids):
+        return [c for c in self.contacts if c.id in contact_ids]
+
 
 class UserContact(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
