@@ -14,8 +14,6 @@ class BaseMixin(object):
     def __init__(self, *args, **kwargs):
         """Initialize. Set the db and session."""
         super(BaseMixin, self).__init__(*args, **kwargs)
-        self.db = db
-        self.session = db.session
 
     def __repr__(self):
         """Repr based on the '__repr_columns__' class variable of the model."""
@@ -78,6 +76,14 @@ class BaseMixin(object):
             if commit:
                 rmndin.lib.db.commit_session(db)
         return obj
+
+    @property
+    def db(self):
+        return db
+
+    @property
+    def session(self):
+        return db.session
 
     def commit_session(self):
         """Commit the session."""
