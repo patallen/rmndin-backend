@@ -1,5 +1,6 @@
 import datetime
 import enum
+import warnings
 
 from rmndin import db
 
@@ -8,7 +9,6 @@ class BaseMixin(object):
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated = db.Column(db.DateTime, default=datetime.datetime.utcnow,
                         onupdate=datetime.datetime.utcnow)
-    __repr_columns__ = []
 
     def __init__(self, *args, **kwargs):
         super(BaseMixin, self).__init__(*args, **kwargs)
@@ -16,6 +16,16 @@ class BaseMixin(object):
         self.session = db.session
 
     def __repr__(self):
+        cls_name = self.__class__.__name__
+
+        if not hasattr(self, '__repr_columns__'):
+            warning = (
+                "%s model is missing the __repr_columns__ class variable. "
+                "This should be utilized for ease of debugging." % cls_name
+            )
+            warnings.warn(warning)
+            return super(BaseMixin, self).__repr__()
+
         rs = ""
         for col in self.__repr_columns__:
             val = getattr(self, col)
@@ -23,9 +33,9 @@ class BaseMixin(object):
                 val = '"%s"' % val
             elif isinstance(val, enum.Enum):
                 val = val.value
-
             rs = "%s%s" % (rs, ' %s=%s' % (col, val))
-        return "<%s:%s>" % (self.__class__.__name__, rs)
+
+        return "<%s:%s>" % (cls_name, rs)
 
     def to_dict(self, exclude=None):
         exclude = exclude or []
