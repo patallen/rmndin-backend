@@ -20,6 +20,7 @@ class Reminder(BaseMixin, db.Model):
     contacts = db.relationship("UserContact", secondary=reminder_contact,
                                backref="reminders")
 
+    __repr_columns__ = ['user_id', 'body', 'eta']
 
     def add_contact(self, contact, commit=True):
         self.contacts.append(contact)

@@ -20,6 +20,8 @@ class User(BaseMixin, db.Model):
     reminders = db.relationship('Reminder', backref='user')
     contacts = db.relationship('UserContact', backref='user')
 
+    __repr__columns__ = ["username", "verified"]
+
     @property
     def password(self):
         return self._password
@@ -55,6 +57,8 @@ class UserContact(BaseMixin, db.Model):
     verified = db.Column(db.Boolean, nullable=False, default=False)
     method = db.Column(db.Enum(DeliveryMethodEnum), nullable=False)
     identifier = db.Column(db.String(256), nullable=False)
+
+    __repr_columns__ = ['user_id', 'method', 'identifier']
 
     def get_vehicle(self):
         if self.method == DeliveryMethodEnum.reddit:

@@ -8,6 +8,24 @@ class BaseMixin(object):
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated = db.Column(db.DateTime, default=datetime.datetime.utcnow,
                         onupdate=datetime.datetime.utcnow)
+    __repr_columns__ = []
+
+    def __init__(self, *args, **kwargs):
+        super(BaseMixin, self).__init__(*args, **kwargs)
+        self.db = db
+        self.session = db.session
+
+    def __repr__(self):
+        rs = ""
+        for col in self.__repr_columns__:
+            val = getattr(self, col)
+            if isinstance(val, basestring):
+                val = '"%s"' % val
+            elif isinstance(val, enum.Enum):
+                val = val.value
+
+            rs = "%s%s" % (rs, ' %s=%s' % (col, val))
+        return "<%s:%s>" % (self.__class__.__name__, rs)
 
     def to_dict(self, exclude=None):
         exclude = exclude or []
