@@ -13,6 +13,7 @@ class User(BaseMixin, db.Model):
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
     verified = db.Column(db.Boolean, nullable=False, default=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
     _password = db.Column(db.String, nullable=False)
 
     reminders = db.relationship('Reminder', backref='user')
@@ -22,6 +23,7 @@ class User(BaseMixin, db.Model):
 
     @property
     def password(self):
+        """Return the hashed password we have stored for the user."""
         return self._password
 
     @password.setter
@@ -31,15 +33,18 @@ class User(BaseMixin, db.Model):
 
     @property
     def alias(self):
+        """What we will call the user."""
         return self.first_name or self.username
 
     def authenticate(self, password):
+        """Check the provided password against the hash we have stored."""
         pw = password.encode('utf-8')
         hashed = self._password.encode('utf-8')
         return bcrypt.checkpw(pw, hashed)
 
     @classmethod
     def get_authed_user(cls, username, password):
+        """Get and authenticate a user given a username and password."""
         user = cls.query.filter(cls.username == username).first()
         if not user:
             return None
