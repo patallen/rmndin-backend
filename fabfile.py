@@ -8,33 +8,46 @@ env.hosts = ['10.10.10.2']
 env.user = 'vagrant'
 env.password = 'vagrant'
 
+BASEPATH = '/var/rmndin'
+VENVPATH = '%senv' % BASEPATH
+BIN_PATH = '%s/bin' % VENVPATH
 
-def add_pip_requirement(name, version=None):
+FLASK_APP = 'manage.py'
+APP_PATH = '%s/%s' % (BASEPATH, FLASK_APP)
+
+
+def command(command):
+    with cd('/var/rmndin'):
+        run('FLASK_APP=%s %s/flask %s' % (APP_PATH, BIN_PATH, command))
+
+
+def add_requirement(name, version=None):
     version = "==%s" % version if version else ""
     with cd('/var/rmndin'):
-        run("/var/rmndinenv/bin/pip install %s%s" % (name, version))
-        run("/var/rmndinenv/bin/pip freeze > requirements.txt")
+        run("%s/pip install %s%s" % (BIN_PATH, name, version))
+        run("%s/pip freeze > requirements.txt" % BIN_PATH)
+
 
 def runserver():
-    run("/var/rmndinenv/bin/python /var/rmndin/manage.py runserver")
+    command("run")
 
 
 def db_migrate(message):
     message = "-m '%s'" % message
-
-    with cd('/var/rmndin'):
-        run("/var/rmndinenv/bin/python /var/rmndin/manage.py db migrate %s"
-            % message)
+    command('db migrate %s' % message)
 
 
 def db_upgrade():
-    with cd('/var/rmndin'):
-        run("/var/rmndinenv/bin/python /var/rmndin/manage.py db upgrade")
+    command("db upgrade")
+
+
+def db_downgrade(revision="-1"):
+    command("db downgrade %s" % revision)
 
 
 def celery_worker(loglevel="info"):
     with cd('/var/rmndin'):
         run(
-            "/var/rmndinenv/bin/celery "
-            "-A rmndin.tasks worker --loglevel={}".format(loglevel)
+            "%s/celery "
+            "-A rmndin.tasks worker --loglevel={}".format(BIN_PATH, loglevel)
         )
