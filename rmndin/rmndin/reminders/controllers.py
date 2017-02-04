@@ -2,17 +2,27 @@
 import datetime
 from rmndin import app
 import dateutils
-from flask_jwt import current_identity as user
+from flask_jwt import current_identity
 
 from rmndin.lib import formats
 from rmndin.reminders.models import Reminder
 from rmndin.reminders.helpers import schedule_reminder
+from rmndin.users.models import User
 
 
-def add_reminder(params):
+def add_reminder(params, user_id):
+    allowed = current_identity.has_access(user_id)
+    if not allowed:
+        return {"error": "Access denied."}
+
+    if user_id == current_identity.id:
+        user = current_identity
+    else:
+        user = User.query.get(user_id)
+
     eta = _eta_from_params(params)
     url = params.get('url')
-    contact_ids = params.get('contacts')
+    contact_ids = params.get('contacts', [])
     user_id = user.id
     ensured = user.owns_contact_ids(contact_ids)
 
@@ -40,12 +50,12 @@ def _valid_horizon(eta):
 
 
 def _eta_from_params(params):
-    set_date = params.get('set_date')
+    set_date = params.get('set_date', None)
 
     if set_date:
         rv = formats.convert_utc_datetime(set_date)
     else:
-        countdown = params.get('countdown') or 0
+        countdown = params.get('countdown') or {}
         hours = countdown.get('hours') or 0
         days = countdown.get('days') or 0
         weeks = countdown.get('weeks') or 0

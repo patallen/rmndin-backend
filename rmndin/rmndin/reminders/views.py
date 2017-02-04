@@ -5,9 +5,9 @@ from rmndin.reminders import controllers
 bp = Blueprint('reminders', __name__)
 
 
-@bp.route('/', methods=['POST'])
+@bp.route('', methods=['POST'])
 @jwt_required()
-def add_reminder():
+def add_reminder(user_id):
     params = request.get_json()
-    rv = controllers.add_reminder(params)
+    rv = controllers.add_reminder(params, user_id)
     return jsonify(rv)
