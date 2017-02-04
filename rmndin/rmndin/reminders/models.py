@@ -28,5 +28,5 @@ class Reminder(BaseMixin, db.Model):
     def add_contacts(self, contacts, commit=True):
         for contact in contacts:
             self.contacts.append(contact)
-
-        self.save()
+        if commit:
+            self.commit_session()
