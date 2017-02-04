@@ -54,16 +54,30 @@ class User(BaseMixin, db.Model):
         return False
 
     def owns_contact_ids(self, contact_ids):
+        """Verify that all of the contact_ids are owned by this user."""
         owned_ids = [con.id for con in self.contacts if con.verified]
         return all([c in owned_ids for c in contact_ids])
 
     def contacts_for_ids(self, contact_ids):
+        """Get the UserContact instances for any contact_ids that match."""
         return [c for c in self.contacts if c.id in contact_ids]
+
+    def has_access(self, user_id=None):
+        """Verify that the user is allowed to access contents of user_id.
+
+        For now this is just checking if the user has the user_id or
+        if the user is and admin.
+        """
+        return self.id == int(user_id) or self.is_admin
 
 
 class UserContact(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', onupdate="CASCADE", ondelete='CASCADE'),
+        nullable=False
+    )
     verified = db.Column(db.Boolean, nullable=False, default=False)
     method = db.Column(db.Enum(DeliveryMethodEnum), nullable=False)
     identifier = db.Column(db.String(256), nullable=False)

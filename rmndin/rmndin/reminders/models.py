@@ -4,14 +4,21 @@ from rmndin.lib.db.mixins import BaseMixin
 
 reminder_contact = db.Table(
     'reminder_contact_association',
-    db.Column('reminder_id', db.Integer, db.ForeignKey('reminder.id')),
-    db.Column('user_contact_id', db.Integer, db.ForeignKey('user_contact.id'))
+    db.Column('reminder_id', db.Integer,
+              db.ForeignKey('reminder.id', onupdate="CASCADE",
+                            ondelete="CASCADE")),
+    db.Column('user_contact_id', db.Integer,
+              db.ForeignKey('user_contact.id', onupdate="CASCADE",
+                            ondelete="CASCADE"))
 )
 
 
 class Reminder(BaseMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', onupdate="CASCADE", ondelete="CASCADE"),
+    )
     task_id = db.Column(db.String(36))
     url = db.Column(db.String, nullable=False)
     note = db.Column(db.String, nullable=True)
@@ -19,7 +26,7 @@ class Reminder(BaseMixin, db.Model):
     fulfilled = db.Column(db.Boolean, nullable=False, default=False)
 
     contacts = db.relationship("UserContact", secondary=reminder_contact,
-                               backref="reminders")
+                               backref="reminders", cascade="all")
 
     __repr_columns__ = ['user_id', 'body', 'eta']
 
