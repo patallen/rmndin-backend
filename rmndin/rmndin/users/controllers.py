@@ -7,8 +7,11 @@ from rmndin.users.models import User, UserContact
 
 
 # @ensure_params(['identifier', 'method'])
-def create_user_contact(params):
-    user_id = current_identity.id
+def create_user_contact(params, user_id):
+    allowed = user_has_access(current_identity, user_id)
+    if not allowed:
+        return {"error": "Access denied."}
+
     identifier = params.get('identifier')
     method = params.get('method')
     enumed_method = DeliveryMethodEnum(method)
@@ -32,12 +35,9 @@ def create_user_contact(params):
         return {"errors":
                 "You've got a pending verification for this contact."}
 
-    contact = UserContact(user_id=user_id,
-                          identifier=identifier,
-                          method=enumed_method)
-
-    db.session.add(contact)
-    db.session.commit()
+    contact = UserContact.create(user_id=user_id,
+                                 identifier=identifier,
+                                 method=enumed_method)
 
     vehicle = contact.get_vehicle()
     vehicle.send_verification()
@@ -91,3 +91,18 @@ def verify_user(hashed_key):
         return {"success": "You are now verified! Please log in."}
     else:
         return {"error": "Invalid verification link."}
+
+
+def user_has_access(user, user_id=None):
+    if int(user.id) == int(user_id):
+        return True
+    return False
+
+
+def get_contacts(params, user_id):
+    allowed = user_has_access(current_identity, user_id)
+    if not allowed:
+        return {"error": "Access denied."}
+
+    contacts = UserContact.query.filter_by(user_id=user_id).all()
+    return {"success": [c.to_dict() for c in contacts]}

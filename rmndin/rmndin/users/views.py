@@ -8,20 +8,20 @@ usersbp = Blueprint('users', __name__)
 verifybp = Blueprint('verify', __name__)
 
 
-@usersbp.route('/contacts', methods=['POST'])
+@usersbp.route('/<user_id>/contacts', methods=['POST'])
 @jwt_required()
-def create_user_contact():
+def create_contact(user_id):
     params = request.get_json()
-    rv = controllers.create_user_contact(params)
+    print current_identity
+    rv = controllers.create_user_contact(params, user_id)
     return jsonify(rv)
 
 
-@usersbp.route('/contacts', methods=['GET'])
+@usersbp.route('/<user_id>/contacts', methods=['GET'])
 @jwt_required()
-def get_contacts():
-    user = current_identity
-    contacts = [u.to_dict() for u in user.contacts if u.verified]
-    return jsonify(contacts)
+def get_contacts(user_id):
+    rv = controllers.get_contacts(current_identity, user_id)
+    return jsonify(rv)
 
 
 @verifybp.route('/contact/<hashed_key>')
