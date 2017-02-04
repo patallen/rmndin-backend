@@ -12,11 +12,13 @@ class BaseMixin(object):
                         onupdate=datetime.datetime.utcnow)
 
     def __init__(self, *args, **kwargs):
+        """Initialize. Set the db and session."""
         super(BaseMixin, self).__init__(*args, **kwargs)
         self.db = db
         self.session = db.session
 
     def __repr__(self):
+        """Repr based on the '__repr_columns__' class variable of the model."""
         cls_name = self.__class__.__name__
 
         if not hasattr(self, '__repr_columns__'):
@@ -39,6 +41,7 @@ class BaseMixin(object):
         return "<%s:%s>" % (cls_name, rs)
 
     def to_dict(self, exclude=None):
+        """Return a dictionary of the model instance."""
         exclude = exclude or []
 
         if isinstance(exclude, str):
@@ -57,6 +60,7 @@ class BaseMixin(object):
 
     @classmethod
     def exists_by_key(cls, key, value, case_sensitive=True):
+        """Check if more than 1 instance exists in the database by key."""
         column = getattr(cls, key)
         query = db.session.query(cls)
         if case_sensitive:
