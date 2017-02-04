@@ -21,10 +21,9 @@ class ContactVehicle(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, user_contact, verified):
+    def __init__(self, user_contact):
         """Initialize the ContactVehicle."""
         self.contact = user_contact
-        self.verified = verified
 
     @abstractmethod
     def send_reminder(self):
@@ -40,6 +39,21 @@ class ContactVehicle(object):
     def identifier(self):
         """Shortcut for getting the contact's identifier."""
         return self.contact.identifier
+
+    @property
+    def user(self):
+        """Return the user associated with the contact."""
+        return self.contact.user
+
+    @property
+    def user_verified(self):
+        """Return the value of User.verified."""
+        return self.user.verified
+
+    @property
+    def contact_verified(self):
+        """Return the value of UserContact.verified."""
+        return self.contact.verified
 
 
 class RedditContactVehicle(ContactVehicle):
