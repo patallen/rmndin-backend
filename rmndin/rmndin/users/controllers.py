@@ -2,7 +2,7 @@ from rmndin import app, db, success, error
 from rmndin.lib.db.enums import DeliveryMethodEnum
 from rmndin.lib.verification import deserialize_key
 from rmndin.users.models import User, UserContact
-
+from rmndin.lib.web.request import get_params
 
 def create_user_contact(params, user_id):
     identifier = params.get('identifier')

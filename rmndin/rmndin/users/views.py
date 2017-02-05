@@ -1,7 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint
 
 from rmndin.auth.decorators import require_user_access
 from rmndin.lib.decorators import require_params
+from rmndin.lib.web.request import get_params
 from rmndin.users import controllers
 
 
@@ -13,7 +14,7 @@ verifybp = Blueprint('verify', __name__)
 @require_user_access
 @require_params('identifier', 'method')
 def create_contact(user_id):
-    params = request.get_json()
+    params = get_params()
     return controllers.create_user_contact(params, user_id)
 
 

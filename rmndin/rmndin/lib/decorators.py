@@ -1,5 +1,5 @@
-from flask import request
 from rmndin import error
+from rmndin.lib.web.request import get_params
 
 
 def _check_required(req, params):
@@ -13,8 +13,7 @@ def _check_required(req, params):
 def require_params(*req):
     def decorator(func):
         def wrapper(*args, **kwargs):
-            params = request.get_json().keys()
-            given = [str(p) for p in params]
+            given = map(str, list(get_params()))
             if not all([_check_required(r, given) for r in req]):
                 return error(
                     message="Missing one or more required params.",
