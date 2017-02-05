@@ -1,17 +1,10 @@
-from flask_jwt import current_identity
-
 from rmndin import app, db
 from rmndin.lib.db.enums import DeliveryMethodEnum
 from rmndin.lib.verification import deserialize_key
 from rmndin.users.models import User, UserContact
 
 
-# @ensure_params(['identifier', 'method'])
 def create_user_contact(params, user_id):
-    allowed = user_has_access(current_identity, user_id)
-    if not allowed:
-        return {"error": "Access denied."}
-
     identifier = params.get('identifier')
     method = params.get('method')
     enumed_method = DeliveryMethodEnum(method)
@@ -95,16 +88,6 @@ def verify_user(hashed_key):
         return {"error": "Invalid verification link."}
 
 
-def user_has_access(user, user_id=None):
-    if int(user.id) == int(user_id):
-        return True
-    return False
-
-
-def get_contacts(params, user_id):
-    allowed = user_has_access(current_identity, user_id)
-    if not allowed:
-        return {"error": "Access denied."}
-
+def get_contacts(user_id):
     contacts = UserContact.query.filter_by(user_id=user_id).all()
     return {"success": [c.to_dict() for c in contacts]}
