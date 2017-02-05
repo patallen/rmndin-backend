@@ -1,4 +1,4 @@
-from rmndin import app
+from rmndin import app, success, error
 from rmndin.auth.validation import (
     validate_username,
     validate_password,
@@ -17,7 +17,10 @@ def user_registration(params):
     email = params.get("email")
 
     if not all((username, password, password2, email)):
-        return {"error": "All fields required."}
+        return error(
+            message="All fields required.",
+            status="bad_request",
+        )
 
     errors_by_param = {}
     check, username_errors = validate_username(username)
@@ -44,7 +47,11 @@ def user_registration(params):
         errors_by_param['email'] = ["Email address is not available."]
 
     if len(errors_by_param):
-        return {"error": errors_by_param}
+        return error(
+            message="There are some errors.",
+            errors=errors_by_param,
+            status="bad_request"
+        )
 
     first_name = params.get('first_name')
     last_name = params.get('last_name')
@@ -56,7 +63,11 @@ def user_registration(params):
 
     _send_email_verification(email=user.email, username=user.username)
 
-    return {"success": user.to_dict()}
+    return success(
+        message="Your account has been created. Check your email for verification.",
+        data=user.to_dict(),
+        status="created"
+    )
 
 
 def _send_email_verification(email, username):

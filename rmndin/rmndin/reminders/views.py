@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from rmndin.reminders import controllers
 
 from rmndin.auth.decorators import require_user_access
@@ -12,5 +12,4 @@ bp = Blueprint('reminders', __name__)
 @require_params('contacts', 'url', ['countdown', 'eta'])
 def add_reminder(user_id):
     params = request.get_json()
-    rv = controllers.add_reminder(params, user_id)
-    return jsonify(rv)
+    return controllers.add_reminder(params, user_id)

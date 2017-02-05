@@ -85,7 +85,8 @@ class RedditContactVehicle(ContactVehicle):
             self.send_verification()
             self.db.session.commit()
         except Exception as e:
-            db.session.rollback()
+            print(e)
+            self.db.session.rollback()
             return False
 
         return True
