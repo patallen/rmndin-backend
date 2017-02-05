@@ -7,7 +7,7 @@ from rmndin import app
 from rmndin.lib.verification import contact_verify_url
 
 from rmndin.services.email import send_template_email
-
+from rmndin.auth import validation
 
 reddit = praw.Reddit(user_agent=app.config['REDDIT_USER_AGENT'],
                      client_id=app.config['REDDIT_CLIENT_ID'],
@@ -25,9 +25,14 @@ class ContactVehicle(object):
         """Initialize the ContactVehicle."""
         self.contact = user_contact
 
+    def is_valid_identifier(self, identifier):
+        if not self.validate_identifier(identifier):
+            raise Exception("Invalid Identifier")
+        return True
+
     @abstractmethod
-    def send_and_save_contact(self):
-        """Save the contact once we are sure it is valid."""
+    def validate_identifier(self, identifier):
+        """Send the reminder message for the specific service."""
         pass
 
     @abstractmethod
@@ -78,18 +83,22 @@ class RedditContactVehicle(ContactVehicle):
         super(RedditContactVehicle, self).__init__(*args, **kwargs)
         self.client = reddit
 
+    def validate_identifier(self, identifier):
+        return validation.validate_reddit_username(identifier)
+
     def send_and_save_contact(self):
         try:
+            self.is_valid_identifier(self.identifier)
             self.db.session.add(self.contact)
             self.db.session.flush()
             self.send_verification()
             self.db.session.commit()
         except Exception as e:
-            print(e)
+            print e
             self.db.session.rollback()
-            return False
+            return False, "Reddit username is invalid or does not exist."
 
-        return True
+        return True, None
 
     def send_reminder(self, message):
         """Send a reminder via reddit messaging."""
@@ -108,6 +117,8 @@ class RedditContactVehicle(ContactVehicle):
 class EmailContactVehicle(ContactVehicle):
     """Email Vehicle."""
 
+    validation_function = validation.validate_email
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the EmailContactVehicle.
@@ -117,18 +128,26 @@ class EmailContactVehicle(ContactVehicle):
         """
         super(EmailContactVehicle, self).__init__(*args, **kwargs)
 
+    def validate_identifier(self, identifier):
+        return validation.validate_email(identifier)
+
     def send_and_save_contact(self):
         try:
+            self.is_valid_identifier(self.identifier)
+            self.db.session.add(self.contact)
+            self.db.session.flush()
             self.send_verification()
+            self.db.session.commit()
         except:
-            return False
+            self.db.session.rollback()
+            return False, "Email is invalid or was unreachable."
 
         self.contact.save()
-        return True
+        return True, None
 
     def send_reminder(self, message):
         """Send a reminder via email."""
-        print "Sending reddit reminder to %s" % self.identifier
+        print "Sending email reminder to %s" % self.identifier
 
     def send_verification(self):
         """Send verification email to the UserContact's email."""

@@ -1,7 +1,5 @@
 import re
 
-from rmndin.users.models import User
-
 
 def validate_username(username):
     errors = []
@@ -49,3 +47,15 @@ def validate_email(email):
         return False, ["Not a valid email address."]
 
     return (True, [])
+
+
+def validate_reddit_username(username):
+    length = len(username or "")
+    if length < 3 or length > 20:
+        return False
+
+    try:
+        user_re = re.compile(r"\A[\w-]+\Z", re.UNICODE)
+        return True if user_re.match(username) else False
+    except:
+        return False

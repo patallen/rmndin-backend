@@ -24,16 +24,21 @@ def create_user_contact(params, user_id):
     exists_for_user = query.filter(f_unverified, f_user, f_id).all()
 
     if exists_for_user:
-        return error(message="You've got a pending verification for this contact.")
+        return error(
+            message="You've got a pending verification for this contact.")
 
     contact = UserContact(user_id=user_id, identifier=identifier,
                           method=enumed_method)
 
     vehicle = contact.get_vehicle()
-    saved = vehicle.send_and_save_contact()
+    saved, err = vehicle.send_and_save_contact()
 
     if not saved:
-        return error(message="We had a problem. May not be a valid contact name.")
+        return error(
+            message="We had a problem creating this contact.",
+            errors=[err],
+            status="bad_request"
+        )
 
     return success(
         contact.to_dict(),
