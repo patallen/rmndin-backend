@@ -35,12 +35,14 @@ def create_user_contact(params, user_id):
         return {"errors":
                 "You've got a pending verification for this contact."}
 
-    contact = UserContact.create(user_id=user_id,
-                                 identifier=identifier,
-                                 method=enumed_method)
+    contact = UserContact(user_id=user_id, identifier=identifier,
+                          method=enumed_method)
 
     vehicle = contact.get_vehicle()
-    vehicle.send_verification()
+    saved = vehicle.send_and_save_contact()
+
+    if not saved:
+        return {"error": "We had a problem. May not be a valid contact name."}
 
     return {"success":
             "Contact created. You must verify it before it can be used."}
@@ -49,7 +51,7 @@ def create_user_contact(params, user_id):
 def verify_contact(hashed_key):
     secret_key = app.config['CONTACT_VERIFY_SECRET']
     max_age = app.config['CONTACT_VERIFY_MAX_AGE']
-    print hashed_key, secret_key, max_age
+
     try:
         info = deserialize_key(hashed_key, secret_key, max_age)
     except Exception as e:

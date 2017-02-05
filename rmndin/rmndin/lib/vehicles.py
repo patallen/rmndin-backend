@@ -26,6 +26,11 @@ class ContactVehicle(object):
         self.contact = user_contact
 
     @abstractmethod
+    def send_and_save_contact(self):
+        """Save the contact once we are sure it is valid."""
+        pass
+
+    @abstractmethod
     def send_reminder(self):
         """Send the reminder message for the specific service."""
         pass
@@ -69,6 +74,15 @@ class RedditContactVehicle(ContactVehicle):
         super(RedditContactVehicle, self).__init__(*args, **kwargs)
         self.client = reddit
 
+    def send_and_save_contact(self):
+        try:
+            self.send_verification()
+        except:
+            return False
+
+        self.contact.save()
+        return True
+
     def send_reminder(self, message):
         """Send a reminder via reddit messaging."""
         print "Sending reddit reminder to %s" % self.identifier
@@ -94,6 +108,15 @@ class EmailContactVehicle(ContactVehicle):
 
         """
         super(EmailContactVehicle, self).__init__(*args, **kwargs)
+
+    def send_and_save_contact(self):
+        try:
+            self.send_verification()
+        except:
+            return False
+
+        self.contact.save()
+        return True
 
     def send_reminder(self, message):
         """Send a reminder via email."""
