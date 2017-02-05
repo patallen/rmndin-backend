@@ -60,6 +60,10 @@ class ContactVehicle(object):
         """Return the value of UserContact.verified."""
         return self.contact.verified
 
+    @property
+    def db(self):
+        return self.contact.db
+
 
 class RedditContactVehicle(ContactVehicle):
     """Reddit Vehicle."""
@@ -76,11 +80,14 @@ class RedditContactVehicle(ContactVehicle):
 
     def send_and_save_contact(self):
         try:
+            self.db.session.add(self.contact)
+            self.db.session.flush()
             self.send_verification()
-        except:
+            self.db.session.commit()
+        except Exception as e:
+            db.session.rollback()
             return False
 
-        self.contact.save()
         return True
 
     def send_reminder(self, message):
