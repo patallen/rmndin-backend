@@ -28,7 +28,7 @@ class Reminder(BaseMixin, db.Model):
     contacts = db.relationship("UserContact", secondary=reminder_contact,
                                backref="reminders", cascade="all")
 
-    __repr_columns__ = ['user_id', 'body', 'eta']
+    __repr_columns__ = ['user_id', 'url', 'eta']
     __default_excludes__ = ['task_id']
 
     def add_contact(self, contact, commit=True):

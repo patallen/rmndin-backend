@@ -55,8 +55,7 @@ class BaseMixin(object):
                 value = getattr(self, name)
                 if isinstance(value, enum.Enum):
                     value = value.name
-
-                rv[name] = str(value)
+                rv[name] = value
         return rv
 
     @classmethod
