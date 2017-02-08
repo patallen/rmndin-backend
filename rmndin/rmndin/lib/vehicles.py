@@ -100,16 +100,16 @@ class RedditContactVehicle(ContactVehicle):
 
         return True, None
 
-    def send_reminder(self, message):
+    def send_reminder(self, url):
         """Send a reminder via reddit messaging."""
-        print "Sending reddit reminder to %s" % self.identifier
+        redditor = praw.models.Redditor(self.client, name=self.identifier)
+        redditor.message("Reminder from Rmnd.in!", url)
 
     def send_verification(self):
         """Send verification email to the UserContact's reddit inbox."""
         secret_key = app.config['CONTACT_VERIFY_SECRET']
         base_url = app.config['URLS']['BASE_URL']
-        redditor = praw.models.Redditor(self.client,
-                                        name=self.identifier)
+        redditor = praw.models.Redditor(self.client, name=self.identifier)
         verify_url = contact_verify_url(self.contact.id, base_url, secret_key)
         redditor.message("Verify your username!", verify_url)
 
@@ -145,9 +145,14 @@ class EmailContactVehicle(ContactVehicle):
         self.contact.save()
         return True, None
 
-    def send_reminder(self, message):
+    def send_reminder(self, url):
         """Send a reminder via email."""
-        print "Sending email reminder to %s" % self.identifier
+        variables = {"url": url, "username": self.contact.user.alias}
+        send_template_email(recipients=[self.identifier],
+                            subject="Reminder from Rmnd.in!",
+                            from_address="reminders@rmnd.in",
+                            variables=variables,
+                            template="email/reminder_email")
 
     def send_verification(self):
         """Send verification email to the UserContact's email."""
