@@ -36,15 +36,16 @@ def send_template_email(recipients, subject,
 
     :return: Response
     """
-    try:
-        html = render_template("%s.html" % template, **variables)
-    except TemplateNotFound:
-        html = None
+    with app.app_context():
+        try:
+            html = render_template("%s.html" % template, **variables)
+        except TemplateNotFound:
+            html = None
 
-    try:
-        text = render_template("%s.txt" % template, **variables)
-    except TemplateNotFound:
-        text = None
+        try:
+            text = render_template("%s.txt" % template, **variables)
+        except TemplateNotFound:
+            text = None
 
     if not (text or html):
         raise TemplateNotFound("No template found with base path '%s'." %
