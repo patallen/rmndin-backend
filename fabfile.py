@@ -57,6 +57,6 @@ def db_downgrade(revision="-1"):
 def celery_worker(loglevel="info"):
     with cd('/var/rmndin'):
         run(
-            "%s/celery "
+            "{}/celery "
             "-A rmndin.tasks worker --loglevel={}".format(BIN_PATH, loglevel)
         )
