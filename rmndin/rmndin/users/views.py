@@ -24,6 +24,11 @@ def get_contacts(user_id):
     return controllers.get_contacts(user_id)
 
 
+@usersbp.route('/contacts/<contact_id>', methods=['DELETE'])
+@require_user_access
+def delete_contact(user_id):
+    return controllers.delete_contact(user_id)
+
 @verifybp.route('/contact/<hashed_key>')
 def verify_contact(hashed_key):
     return controllers.verify_contact(hashed_key)

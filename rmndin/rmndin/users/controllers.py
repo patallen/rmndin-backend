@@ -46,6 +46,17 @@ def create_user_contact(params, user_id):
         status='created'
     )
 
+def delete_contact(contact_id):
+    del_cout = UserContact.query.delete(contact_id)
+    if del_count < 1:
+        return error(message="No contact found.", status="not_found")
+
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
+        return error(message="Something went wrong.", status="bad_request")
+    return success("Successfully deleted!", status="success")
 
 def verify_contact(hashed_key):
     secret_key = app.config['CONTACT_VERIFY_SECRET']
