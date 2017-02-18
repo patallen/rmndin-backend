@@ -12,7 +12,7 @@ BASEPATH = '/var/rmndin'
 VENVPATH = '%senv' % BASEPATH
 BIN_PATH = '%s/bin' % VENVPATH
 
-FLASK_APP = 'manage.py'
+FLASK_APP = 'rmndin/__init__.py'
 APP_PATH = '%s/%s' % (BASEPATH, FLASK_APP)
 ENVIRONMENT = {
     "FLASK_DEBUG": 1,
@@ -37,8 +37,14 @@ def add_requirement(name, version=None):
         run("%s/pip freeze > requirements.txt" % BIN_PATH)
 
 
-def runserver():
-    command("run")
+def runserver(host='0.0.0.0', port=5000, debug=True, autoreload=True):
+    args = "-h {host} -p {port}".format(host=host, port=port)
+    if debug:
+        args = "{args} --debugger".format(args=args)
+
+    if autoreload:
+        args = "{args} --reload".format(args=args)
+    command("run {args}".format(args=args))
 
 
 def db_migrate(message):
