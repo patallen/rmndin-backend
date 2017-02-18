@@ -20,7 +20,7 @@ def send_reminder(reminder_id):
         try:
             vehicle.send_reminder(reminder.url)
         except Exception as e:
-            print e
+            print(e)
             errors.append(
                 "Reminder: %s - UserContact: %s" % (reminder.id, contact.id)
             )
