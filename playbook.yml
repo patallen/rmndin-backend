@@ -30,7 +30,7 @@
       pip:
         requirements: /var/rmndin/requirements.txt
         virtualenv: /var/rmndinenv
-        virtualenv_python: python2.7
+        virtualenv_python: python3
 
     - name: Copy nginx configuration
       template:
